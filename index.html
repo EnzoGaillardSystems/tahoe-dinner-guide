@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍽️ South Lake Tahoe Dinner Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23ffffff10"/></svg>');
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+        
+        h2 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #a0a0a0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .restaurant-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .rating {
+            display: inline-block;
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .cuisine-tag {
+            display: inline-block;
+            background: rgba(78, 205, 196, 0.3);
+            color: #4ecdc4;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        
+        .price-tag {
+            display: inline-block;
+            background: rgba(46, 213, 115, 0.3);
+            color: #2ed573;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .pros {
+            background: rgba(46, 213, 115, 0.1);
+            border-left: 4px solid #2ed573;
+        }
+        
+        .cons {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .pros h4 { color: #2ed573; }
+        .cons h4 { color: #ff6b6b; }
+        
+        ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .pros li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #2ed573;
+        }
+        
+        .cons li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+        }
+        
+        .review-quote {
+            background: rgba(255,215,0,0.1);
+            border-left: 4px solid #ffd700;
+            padding: 15px 20px;
+            margin: 15px 0;
+            font-style: italic;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .review-quote cite {
+            display: block;
+            margin-top: 10px;
+            font-style: normal;
+            color: #ffd700;
+            font-size: 0.85em;
+        }
+        
+        .address {
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .address a {
+            color: #4ecdc4;
+            text-decoration: none;
+        }
+        
+        .enzo-pick {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd700);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85em;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .divider {
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            margin: 40px auto;
+            border-radius: 2px;
+        }
+        
+        .final-verdict {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .winner {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        
+        .winner-name {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .criteria {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .criterion {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            min-width: 150px;
+        }
+        
+        .criterion .emoji {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-dot.active {
+            background: #ffd700;
+            transform: scale(1.3);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            .pros-cons { grid-template-columns: 1fr; }
+            .criteria { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide" id="slide1">
+        <div class="content">
+            <h1>🍽️ South Lake Tahoe</h1>
+            <h1>Dinner Guide</h1>
+            <p class="subtitle">Top 5 Affordable, High-Quality Restaurants</p>
+            <p class="subtitle" style="font-size: 1em; margin-top: 30px;">
+                📍 February 7, 2026 | Curated by Enzo 🏎️
+            </p>
+            <div class="criteria">
+                <div class="criterion">
+                    <span class="emoji">⭐</span>
+                    <span>High Ratings</span>
+                </div>
+                <div class="criterion">
+                    <span class="emoji">💰</span>
+                    <span>Affordable</span>
+                </div>
+                <div class="criterion">
+                    <span class="emoji">🏆</span>
+                    <span>Quality First</span>
+                </div>
+            </div>
+            <p class="subtitle" style="font-size: 0.9em; color: #ff6b6b; margin-top: 20px;">
+                ❌ No Italian | ❌ No Vietnamese/Thai | ❌ No Burgers
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 2: #5 Cold Water Brewery -->
+    <div class="slide" id="slide2">
+        <div class="content">
+            <h2>#5 — Cold Water Brewery & Grill</h2>
+            <div class="restaurant-card">
+                <span class="rating">⭐ 4.4/5 TripAdvisor</span>
+                <span class="cuisine-tag">🍺 American Craft</span>
+                <span class="price-tag">$$ Moderate</span>
+                
+                <p style="margin: 15px 0; font-size: 1.1em;">
+                    Lake Tahoe's favorite brewery with 14 house-crafted beers and California comfort food from a scratch kitchen.
+                </p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ PROS</h4>
+                        <ul>
+                            <li>14 craft beers brewed on-site</li>
+                            <li>Dog-friendly outdoor patio</li>
+                            <li>Great atmosphere</li>
+                            <li>Scratch kitchen = fresh food</li>
+                            <li>Ranked #12 of 182 restaurants</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ CONS</h4>
+                        <ul>
+                            <li>Can get loud/crowded</li>
+                            <li>Pub food (not fine dining)</li>
+                            <li>Wait times on weekends</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="review-quote">
+                    "Amazing craft beers and the mac and cheese is to die for! Perfect après-ski spot."
+                    <cite>— TripAdvisor Reviewer</cite>
+                </div>
+                
+                <p class="address">📍 2544 Lake Tahoe Blvd, South Lake Tahoe, CA 96150</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: #4 Kalani's -->
+    <div class="slide" id="slide3">
+        <div class="content">
+            <h2>#4 — Kalani's</h2>
+            <div class="restaurant-card">
+                <span class="rating">⭐ 4.3/5 (5,200+ reviews)</span>
+                <span class="cuisine-tag">🌺 Hawaiian/Seafood/Sushi</span>
+                <span class="price-tag">$$$ Upscale Casual</span>
+                
+                <p style="margin: 15px 0; font-size: 1.1em;">
+                    Premier Hawaiian-inspired restaurant in Heavenly Village. Fresh seafood, sushi, steaks with genuine aloha hospitality.
+                </p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ PROS</h4>
+                        <ul>
+                            <li>1,700+ OpenTable reviews</li>
+                            <li>Beautiful presentations</li>
+                            <li>Fresh sushi & raw bar</li>
+                            <li>Great location in Heavenly Village</li>
+                            <li>Weekend brunch available</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ CONS</h4>
+                        <ul>
+                            <li>Pricier than others on list</li>
+                            <li>Reservations recommended</li>
+                            <li>Can be touristy</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="review-quote">
+                    "Consistently very good all around. Staff were welcoming, attentive and accommodating. The thick pork chops and fresh sushi showcase artistic flair."
+                    <cite>— OpenTable Reviewer</cite>
+                </div>
+                
+                <p class="address">📍 Heavenly Village, South Lake Tahoe, CA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: #3 Taqueria Jaliscos -->
+    <div class="slide" id="slide4">
+        <div class="content">
+            <h2>#3 — Taqueria Jaliscos</h2>
+            <div class="restaurant-card">
+                <span class="rating">⭐ 4.5/5 TripAdvisor</span>
+                <span class="cuisine-tag">🌮 Authentic Mexican</span>
+                <span class="price-tag">$ Budget-Friendly</span>
+                
+                <p style="margin: 15px 0; font-size: 1.1em;">
+                    Hidden gem and neighborhood favorite. Unassuming strip mall location but stellar authentic Mexican food.
+                </p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ PROS</h4>
+                        <ul>
+                            <li>BEST VALUE on this list 💰</li>
+                            <li>Pozole praised as best in region</li>
+                            <li>Authentic flavors, great salsas</li>
+                            <li>Friendly, fast service</li>
+                            <li>Neighborhood favorite in 6 areas</li>
+                            <li>Health score: 89/100</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ CONS</h4>
+                        <ul>
+                            <li>No ambiance (strip mall)</li>
+                            <li>Small/basic seating</li>
+                            <li>Not fine dining</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="review-quote">
+                    "Been in Tahoe for a week and had to come back 5 times for their pozole! Visiting from LA and this spot's Pozole tops any restaurants I've been to."
+                    <cite>— Postcard Reviewer</cite>
+                </div>
+                
+                <p class="address">📍 972 Tallac Ave, South Lake Tahoe, CA 96150</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: #2 Artemis Lakefront Cafe -->
+    <div class="slide" id="slide5">
+        <div class="content">
+            <h2>#2 — Artemis Lakefront Cafe</h2>
+            <div class="restaurant-card">
+                <span class="rating">⭐ 4.5/5 (1,850+ Yelp reviews)</span>
+                <span class="cuisine-tag">🫒 Greek/Mediterranean</span>
+                <span class="price-tag">$$ Moderate</span>
+                
+                <p style="margin: 15px 0; font-size: 1.1em;">
+                    Fresh Greek & Mediterranean with lakefront views at Ski Run Marina. Gorgeous outdoor patio with fire pit!
+                </p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ PROS</h4>
+                        <ul>
+                            <li>LAKEFRONT VIEWS! 🌅</li>
+                            <li>Outdoor fire pit patio</li>
+                            <li>"Best budget option" per reviews</li>
+                            <li>Full espresso bar + cocktails</li>
+                            <li>"Best fries in town"</li>
+                            <li>Health score: 100/100 🏆</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ CONS</h4>
+                        <ul>
+                            <li>Live music can be LOUD</li>
+                            <li>$11 baklava (overpriced dessert)</li>
+                            <li>May close early in slow season</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="review-quote">
+                    "One of South Lake Tahoe's best value/budget options. Wonderful tzatziki loaded with garlic. Lamb gyros very good, and the Lamb Gyros Plate is generously portioned."
+                    <cite>— TripAdvisor Reviewer</cite>
+                </div>
+                
+                <p class="address">📍 900 Ski Run Blvd, Ski Run Marina, South Lake Tahoe, CA 96150</p>
+                <p class="address">⏰ Mon-Fri 11am-9pm | Sat-Sun 9am-9pm</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: #1 Evan's American Gourmet Cafe -->
+    <div class="slide" id="slide6">
+        <div class="content">
+            <h2>🏆 #1 — Evan's American Gourmet Cafe</h2>
+            <div class="restaurant-card" style="border: 2px solid #ffd700;">
+                <span class="enzo-pick">🏎️ ENZO'S TOP PICK</span>
+                <span class="rating">⭐ 4.7/5 TripAdvisor — #3 in ALL of SLT</span>
+                <span class="cuisine-tag">🍷 American Fine Dining</span>
+                <span class="price-tag">$$-$$$ Worth Every Penny</span>
+                
+                <p style="margin: 15px 0; font-size: 1.1em;">
+                    South Lake Tahoe's most acclaimed restaurant. Vintage Tahoe cabin with world-class fusion cuisine. Only 11 tables — intimate and exceptional.
+                </p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ PROS</h4>
+                        <ul>
+                            <li>HIGHEST RATED on this list 🏆</li>
+                            <li>Top Zagat-rated in the Sierras</li>
+                            <li>"Big city fine dining at reasonable cost"</li>
+                            <li>Cozy cabin atmosphere</li>
+                            <li>Extensive wine list (20% off takeout)</li>
+                            <li>Health score: 100/100</li>
+                            <li>Creative seasonal menu</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ CONS</h4>
+                        <ul>
+                            <li>Only 11 tables — RESERVE AHEAD!</li>
+                            <li>Closed Sun-Mon</li>
+                            <li>Opens 5pm (dinner only)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="review-quote">
+                    "Every aspect of the meal was 5 star. Service outstanding, food elegantly prepared. This is big city quality fine dining for a reasonable cost. Will travel back to Tahoe just to dine at Evans again."
+                    <cite>— Multiple TripAdvisor Reviewers</cite>
+                </div>
+                
+                <p class="address">📍 536 Emerald Bay Road, South Lake Tahoe, CA 96150</p>
+                <p class="address">📞 530-542-1990 | ⏰ Tue-Sat 5pm-9pm</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Final Verdict -->
+    <div class="slide" id="slide7">
+        <div class="content final-verdict">
+            <h2>🏎️ Enzo's Final Verdict</h2>
+            
+            <div class="divider"></div>
+            
+            <div style="margin: 40px 0;">
+                <p style="font-size: 1.3em; color: #a0a0a0;">For the BEST overall experience:</p>
+                <p class="winner-name">Evan's American Gourmet Cafe</p>
+                <p style="color: #ffd700;">Call NOW: 530-542-1990 (only 11 tables!)</p>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div style="margin: 40px 0;">
+                <p style="font-size: 1.3em; color: #a0a0a0;">For VIEWS + VALUE:</p>
+                <p class="winner-name" style="font-size: 1.8em;">Artemis Lakefront Cafe</p>
+                <p style="color: #4ecdc4;">Lakefront Mediterranean with fire pit 🌅</p>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div style="margin: 40px 0;">
+                <p style="font-size: 1.3em; color: #a0a0a0;">For AUTHENTIC MEXICAN (budget king):</p>
+                <p class="winner-name" style="font-size: 1.8em;">Taqueria Jaliscos</p>
+                <p style="color: #2ed573;">Skip the fancy if you want REAL tacos 🌮</p>
+            </div>
+            
+            <div class="criteria" style="margin-top: 50px;">
+                <div class="criterion">
+                    <span class="emoji">🥇</span>
+                    <span>Evan's</span>
+                    <span style="display: block; font-size: 0.8em; color: #a0a0a0;">Best Overall</span>
+                </div>
+                <div class="criterion">
+                    <span class="emoji">🌅</span>
+                    <span>Artemis</span>
+                    <span style="display: block; font-size: 0.8em; color: #a0a0a0;">Best Views</span>
+                </div>
+                <div class="criterion">
+                    <span class="emoji">💰</span>
+                    <span>Jaliscos</span>
+                    <span style="display: block; font-size: 0.8em; color: #a0a0a0;">Best Value</span>
+                </div>
+            </div>
+            
+            <p style="margin-top: 50px; color: #666; font-size: 0.9em;">
+                Bon appétit! 🍽️<br>
+                — Enzo 🏎️
+            </p>
+        </div>
+    </div>
+
+    <!-- Navigation dots -->
+    <div class="nav">
+        <div class="nav-dot active" onclick="scrollToSlide(1)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(2)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(3)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(4)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(5)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(6)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(7)"></div>
+    </div>
+
+    <script>
+        function scrollToSlide(n) {
+            document.getElementById('slide' + n).scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Update nav dots on scroll
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.nav-dot');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(slides).indexOf(entry.target);
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        slides.forEach(slide => observer.observe(slide));
+    </script>
+</body>
+</html>
